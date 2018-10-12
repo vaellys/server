@@ -1,0 +1,37 @@
+server:
+  port: 1004
+  
+spring:
+  freemarker:
+    allow-request-override: false
+    allow-session-override: false
+    cache: true
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: true
+    prefer-file-system-access: true
+    suffix: .ftl
+    template-loader-path: classpath:/templates/
+        
+sccf:
+  auth:
+    clientId: ENC(legvbZ4KwfYyIuf/20Mhdklrj7pC4val)
+    clientSecret: ENC(ib8sQVQ8djle786XDhprWw==)
+    scope: server
+
+urls:
+  collects:
+    - /auth/**
+    - /**/*.css
+    - /**/*.png
+    - /info
+    - /health
+    - /metrics/**
+    - /loggers/**
+
+logging:
+  config: classpath:logback.xml

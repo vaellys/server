@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: sccf-auth-server
+  profiles:
+    active: dev
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        service-id: sccf-config-server
+        enabled: true
+      profile: ${spring.profiles.active}
+      label: ${spring.profiles.active}
+
+---
+spring:
+  profiles: dev
+
+security:
+  user:
+    name: "admin"
+    password: "123456"
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:1001/eureka
+    registry-fetch-interval-seconds: 10
+
+---
+spring:
+  profiles: untest
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@47.106.144.24:1001/eureka
+---
+spring:
+  profiles: prod
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:1001/eureka
+

@@ -1,0 +1,83 @@
+server:
+  port: 1002
+
+spring:
+  application:
+    name: sccf-config-server
+  profiles:
+    active: native,dev #native访问本地配置 dev 打开git配置
+  cloud:
+    config:
+      server:
+        #git:
+          #uri: https://github.com/liuweijw/fw-cloud-framework-config.git # 配置git仓库的地址
+          #default-label: ${spring.profiles.active}
+          #search-paths:                                                  # git仓库地址下的相对地址，可以配置多个，用,分割。
+        native:
+          searchLocations: classpath:/dev							 # 本地环境配置
+---
+spring:
+  profiles: dev
+
+security:
+  user:
+    name: "admin"
+    password: "123456"
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  client:
+    healthcheck:
+      enabled: true # 开启健康检查（依赖spring-boot-starter-actuator）
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:1001/eureka
+    registry-fetch-interval-seconds: 10
+---
+spring:
+  profiles: test
+
+security:
+  user:
+    name: "admin"
+    password: "123456"
+
+  cloud:
+    config:
+      retry:
+        initial-interval: 3000
+        multiplier: 1.5
+        max-interval: 20000
+        max-attempts: 6
+eureka:
+  instance:
+    ip-address: 47.106.144.24
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@47.106.144.24:1001/eureka
+---
+
+security:
+  user:
+    name: "admin"
+    password: "123456"
+
+spring:
+  profiles: prod
+  cloud:
+    config:
+      retry:
+        initial-interval: 3000
+        multiplier: 1.5
+        max-interval: 20000
+        max-attempts: 6
+eureka:
+  instance:
+    ip-address: 127.0.0.1
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:1001/eureka

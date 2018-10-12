@@ -1,0 +1,50 @@
+server:
+  port: 1001
+
+spring:
+  application:
+    name: sccf-eureka-server
+  profiles:
+    active: dev
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+
+---
+spring:
+  profiles: dev
+security:
+  basic:
+    enabled: true
+  user:
+    name: admin
+    password: 123456
+eureka:
+  server:
+    enable-self-preservation: false #Eureka自我保护机制以及心跳周期长会遇到 Eureka不剔除已关停的节点的问题，默认打开状态。建议生产环境打开此配置
+    eviction-interval-timer-in-ms: 4000 #清理间隔（单位毫秒，默认是60*1000）
+    maxThreadsForPeerReplication: 0 #取将被用于复制线程的最大数目，默认为20
+---
+spring:
+  profiles: test
+security:
+  basic:
+    enabled: true
+  user:
+    name: admin
+    password: 123456
+eureka:
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 30000
+---
+spring:
+  profiles: prod
+security:
+  basic:
+    enabled: true
+  user:
+    name: admin
+    password: 123456
